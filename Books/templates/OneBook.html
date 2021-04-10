@@ -1,0 +1,66 @@
+{% load custom_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Images</title>
+
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+      </script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+      </script>
+</head>
+<body>
+            <div class="col-md-4">
+                    {{ book.name }}
+                     <img src="{{ book.imagebook_set.all.0.image.url }}" class="img-responsive" style="width: 100%; float: left; margin-right: 10px;" />
+                <button onclick="getLocation({{book.location|get_list}});">Try It</button>
+                <script>
+                    console.log({{book.location|get_list}});
+                </script>
+            </div>
+<p id="demo1">Book location: {{book.location|get_list}}</p>
+<p id="demo"></p>
+<p id="dist"></p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+var x = document.getElementById("demo");
+
+function getLocation(locatio) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+    var lat2 = locatio[0];
+    var lon2 = locatio[1];
+    showPosition(position, lat2, lon2);
+  });
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position,lat2,lon2) {
+  x.innerHTML = "Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude;
+  var latlon = position.coords.latitude + "," + position.coords.longitude;
+     $.ajax({
+        type: 'POST',
+        url: '{% url 'distance' %}',
+        data: {
+                    'lat1':position.coords.latitude,
+                    'lat2':lat2,
+                    'lon1':position.coords.longitude,
+                    'lon2':lon2
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.dist) {
+            $( '#dist' ).text(data.dist+" km");
+          }
+        }
+      });
+}
+</script>
+</body>
+</html>

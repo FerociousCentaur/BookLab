@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Hello
+<a href="{% url 'logout' %}">Logout</a>
+
+<div id="mapholder"></div>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+<p id="dist"></p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude;
+  var latlon = position.coords.latitude + "," + position.coords.longitude;
+     $.ajax({
+        type: 'POST',
+        url: '{% url 'distance' %}',
+        data: {
+          'lat1':position.coords.latitude,
+                  'lat2':position.coords.longitude,
+                   'lon1':0.0,
+                    'lon2':0.0
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.dist) {
+            $( '#dist' ).text(data.dist+" km");
+          }
+        }
+      });
+}
+</script>
+<!--<script>-->
+<!--var x = document.getElementById("demo");-->
+<!--window.onload =function(){ getLocation() };-->
+<!--getLocation() {-->
+<!--  if (navigator.geolocation) {-->
+<!--    navigator.geolocation.watchPosition(showPosition);-->
+<!--  } else {-->
+<!--    x.innerHTML = "Geolocation is not supported by this browser.";-->
+<!--  }-->
+<!--}-->
+
+<!--function showPosition(position) {-->
+<!--  var latlon = position.coords.latitude + "," + position.coords.longitude;-->
+
+<!--  var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=-->
+<!--  "+latlon+"&zoom=14&size=400x300&sensor=false&key=AIzaSyBoD_kXJr4oVj9GMMEg1IGoiC31PqhbHEY";-->
+<!--  console.log(img_url);-->
+
+<!--  document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";-->
+<!--}-->
+<!--</script>-->
+<!--$.ajax(-->
+<!--    {-->
+<!--        type:"POST",-->
+<!--        url: "/distance",-->
+<!--        data:{-->
+<!--                 lat1:position.coords.latitude,-->
+<!--                  lat2:position.coords.longitude,-->
+<!--                   lon1:0.0,-->
+<!--                    lon2:0.0-->
+<!--        },-->
+<!--        success: function( data )-->
+<!--        {-->
+<!--            $( '#dist' ).text(data);-->
+<!--        }-->
+<!--     })-->
+</body>
+</html>
