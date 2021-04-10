@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Easy Pissy</title>
+	</head>
+	<body>
+		  <label for="fname">First name:</label>
+		  <input type="text" id="fname" name="fname"><br><br>
+			<button id="Stored" onclick="valueStorer()"> Submit</button>
+			<button onclick="Geeks()">Show all Vals</button>
+			<h1>Name of Suckers</h1>
+				<button onclick="style.display = 'none'">Sreeja1</button>
+				<button onclick="style.display = 'none'">Sreeja2</button>
+				<button onclick="style.display = 'none'">Sreeja3</button>
+				<button onclick="style.display = 'none'">Sreeja</button>
+				<button onclick="style.display = 'none'">Sreeja4</button>
+
+///Adding deletion of buttons
+
+
+ 		<script>
+				var inputed=document.getElementById("fname").value;
+				var array=[];
+
+				document.getElementById("fname").addEventListener("keyup", function(event){
+					if (event.keyCode == 0 || event.keyCode == 32) {
+		 			 // Cancel the default action, if needed
+		 			 event.preventDefault();
+		 			 // Trigger the button element with a click
+		 			 document.getElementById("Stored").click();
+					 turnBlank();
+		 		 }
+				});
+
+				function turnBlank(){
+					document.getElementById("fname").value="";
+				}
+
+				function valueStorer(){
+					console.log(document.getElementById("fname").value);
+					array.push(document.getElementById("fname").value);
+				}
+
+				function elementRemover(){
+							 for( var i = 0; i < array.length; i++){
+								 	if ( array[i] === 5) {
+							 		 		array.splice(i, 1);
+							 }
+					}}
+
+				function Geeks(){
+					document.write(array);
+					console.log(array);
+				}
+
+				function deleteButtons(){
+					button.style.display = "none";
+				}
+
+		</script>
+	</body>
+</html>
